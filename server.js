@@ -37,7 +37,6 @@ module.exports = function(app) {
 // database
 const db = require("./app/models");
 const Peep = db.peep;
-
 /*
     db.sequelize.sync({force: true}).then(() => {
         console.log('Drop and Recreate Db');
@@ -81,7 +80,6 @@ app.listen(PORT, () => {
 
 function initial() {
   Peep.create({
-    id: 1,
     name: "David Knoxville",
     userKey: 10,
     phone1: "919-888-3000",
@@ -92,7 +90,6 @@ function initial() {
   });
 
   Peep.create({
-    id: 2,
     name: "Patty Brown",
     userKey: 10,
     phone1: "722-310-1288",
@@ -103,7 +100,6 @@ function initial() {
   });
 
   Peep.create({
-    id: 3,
     name: "Nancy Reynolds",
     userKey: 13,
     phone1: "800-825-9274",
@@ -114,7 +110,6 @@ function initial() {
   });
 
   Peep.create({
-    id: 4,
     name: "Peggy Smith",
     userKey: 13,
     phone1: "892-123-7702",
@@ -125,7 +120,6 @@ function initial() {
   });
 
   Peep.create({
-    id: 5,
     name: "Robert Sandberg",
     userKey: 13,
     phone1: "877-655-2309",

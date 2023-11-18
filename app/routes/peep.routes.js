@@ -1,3 +1,9 @@
+/**
+ * VirtualYou
+ * @license Apache-2.0
+ * @author David L Whitehurst
+ */
+
 const { authJwt } = require("../utility");
 const controller = require("../controllers/peep.controller");
 
@@ -10,44 +16,93 @@ module.exports = function(app) {
         next();
     });
 
+/*
+ * ************************************************************************
+ * ADMIN ONLY
+ * ************************************************************************
+ */
+    // GET - all peeps
     app.get(
         "/personal/v1/peeps",
-//        [authJwt.verifyToken],
-        controller.getAllPeeps //getAllPeeps
+        [authJwt.verifyToken, authJwt.isAdmin],
+        controller.getAllPeeps
     );
 
+    // GET - a peep by id
     app.get(
         "/personal/v1/peeps/:id",
-//        [authJwt.verifyToken, authJwt.isOwner],
+        [authJwt.verifyToken, authJwt.isAdmin],
         controller.getPeep
     );
 
-    // Create a new Peep
-    app.post(
-        "/personal/v1/peeps",
-//        [authJwt.verifyToken, authJwt.isOwner],
-        controller.createPeep
-    );
-
-    // Update a Peep with PeepId
+    // PUT - update a peep by id
     app.put(
         "/personal/v1/peeps/:id",
-//        [authJwt.verifyToken, authJwt.isOwner],
+        [authJwt.verifyToken, authJwt.isAdmin],
         controller.updatePeep
     );
 
-    // Delete a Peep with PeepId
+    // DELETE - a peep by id
     app.delete(
         "/personal/v1/peeps/:id",
-//        [authJwt.verifyToken, authJwt.isOwner],
+        [authJwt.verifyToken, authJwt.isAdmin],
         controller.deletePeep
     );
 
-    // Delete all Peeps
+    // DELETE - all peeps
     app.delete(
         "/personal/v1/peeps",
-//        [authJwt.verifyToken, authJwt.isOwner],
+        [authJwt.verifyToken, authJwt.isAdmin],
         controller.deleteAllPeeps
     );
+
+    /*
+     * ************************************************************************
+     * OWNER, AGENT, (MONITOR?) USER
+     * ************************************************************************
+     */
+
+    // GET - all peeps for owner
+    app.get(
+        "/personal/v1/owner/peeps",
+        [authJwt.verifyToken, authJwt.isOwnerOrAgentOrMonitor],
+        controller.getAllPeepsForOwner
+    );
+
+    // GET - peep by id for owner only
+    app.get(
+        "/personal/v1/owner/peeps/:id",
+        [authJwt.verifyToken, authJwt.isOwnerOrAgentOrMonitor],
+        controller.getPeepForOwner
+    );
+
+    // POST - create a new Peep for owner (owner or agent cognizant of userKey)
+    app.post(
+        "/personal/v1/owner/peeps",
+        [authJwt.verifyToken, authJwt.isOwnerOrAgent],
+        controller.createPeepForOwner
+    );
+
+    // PUT - update a peep for owner only
+    app.put(
+        "/personal/v1/owner/peeps/:id",
+        [authJwt.verifyToken, authJwt.isOwnerOrAgent],
+        controller.updatePeepForOwner
+    );
+
+    // DELETE - delete a peep by id for owner only
+    app.delete(
+        "/personal/v1/owner/peeps/:id",
+        [authJwt.verifyToken, authJwt.isOwnerOrAgent],
+        controller.deletePeepForOwner
+    );
+
+    // DELETE - all peeps for owner only
+    app.delete(
+        "/personal/v1/owner/peeps",
+        [authJwt.verifyToken, authJwt.isOwnerOrAgent],
+        controller.deleteAllPeepsForOwner
+    );
+
 };
 

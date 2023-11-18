@@ -187,7 +187,7 @@ exports.createPeepForOwner = (req, res) => {
     // Create Peep using Sequelize
     Peep.create(peep)
         .then(data => {
-            res.send(data);
+            res.status(201).send(data);
         })
         .catch(err => {
             res.status(500).send({

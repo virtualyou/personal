@@ -1,11 +1,11 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is a Contacts REST API server. You can find out more about this backend JSON server at [https://github.com/dlwhitehurst/contacts](https://github.com/dlwhitehurst/contacts) ",
-    "version": "1.0.0",
-    "title": "Contacts",
+    "description": "This is the VirtualYou Personal API server. You can find out more about this backend JSON server at [https://github.com/dlwhitehurst/peeps](https://github.com/dlwhitehurst/personal) ",
+    "version": "0.0.0",
+    "title": "Personal",
     "termsOfService": "http://swagger.io/terms/",
-    "contact": {
+    "peep": {
       "email": "dlwhitehurst@gmail.com"
     },
     "license": {
@@ -13,12 +13,12 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "localhost:3000",
-  "basePath": "/v1",
+  "host": "localhost:3006",
+  "basePath": "personal/v1",
   "tags": [
     {
       "name": "REST API",
-      "description": "Operations for Contacts",
+      "description": "Operations for Peeps",
       "externalDocs": {
         "description": "Find out more",
         "url": "http://swagger.io"
@@ -29,14 +29,14 @@
     "http"
   ],
   "paths": {
-    "/contacts": {
+    "/peeps": {
       "get": {
         "tags": [
-          "contact resource"
+          "peep resource"
         ],
-        "summary": "Get Contacts",
-        "description": "Get a JSON collection or array of Contacts",
-        "operationId": "getContacts",
+        "summary": "Get Peeps",
+        "description": "Get a JSON collection or array of Peeps",
+        "operationId": "getPeeps",
         "produces": [
           "application/json"
         ],
@@ -46,7 +46,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Contact"
+                "$ref": "#/definitions/Peep"
               }
             }
           }
@@ -54,11 +54,11 @@
       },
       "post": {
         "tags": [
-          "contact resource"
+          "peep resource"
         ],
-        "summary": "Add a new Contact",
+        "summary": "Add a new Peep",
         "description": "",
-        "operationId": "addContact",
+        "operationId": "addPeep",
         "consumes": [
           "application/json"
         ],
@@ -69,10 +69,10 @@
           {
             "in": "body",
             "name": "body",
-            "description": "Contact object to be added to the system",
+            "description": "Peep object to be added to the system",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Contact"
+              "$ref": "#/definitions/Peep"
             }
           }
         ],
@@ -84,11 +84,11 @@
       },
       "delete": {
         "tags": [
-          "contact resource"
+          "peep resource"
         ],
-        "summary": "Deletes all Contacts",
+        "summary": "Deletes all Peeps",
         "description": "",
-        "operationId": "deleteAllContacts",
+        "operationId": "deleteAllPeeps",
         "produces": [
           "application/json"
         ],
@@ -99,23 +99,23 @@
         }
       }
     },
-    "/contacts/{contactId}": {
+    "/peeps/{peepId}": {
       "get": {
         "tags": [
-          "contact resource"
+          "peep resource"
         ],
-        "summary": "Find Contact by ID",
-        "description": "Returns a single Contact",
-        "operationId": "getContactById",
+        "summary": "Find Peep by ID",
+        "description": "Returns a single Peep",
+        "operationId": "getPeepById",
         "produces": [
           "application/xml",
           "application/json"
         ],
         "parameters": [
           {
-            "name": "contactId",
+            "name": "peepId",
             "in": "path",
-            "description": "ID of Contact to return",
+            "description": "ID of Peep to return",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -125,7 +125,7 @@
           "200": {
             "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/Contact"
+              "$ref": "#/definitions/Peep"
             }
           },
           "400": {
@@ -138,11 +138,11 @@
       },
       "put": {
         "tags": [
-          "contact resource"
+          "peep resource"
         ],
-        "summary": "Update an existing Contact",
+        "summary": "Update an existing Peep",
         "description": "",
-        "operationId": "updateContactById",
+        "operationId": "updatePeepById",
         "consumes": [
           "application/json"
         ],
@@ -151,9 +151,9 @@
         ],
         "parameters": [
           {
-            "name": "contactId",
+            "name": "peepId",
             "in": "path",
-            "description": "ID of Contact to return",
+            "description": "ID of Peep to return",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -173,19 +173,19 @@
       },
       "delete": {
         "tags": [
-          "contact resource"
+          "peep resource"
         ],
-        "summary": "Deletes a Contact by ID",
+        "summary": "Deletes a Peep by ID",
         "description": "",
-        "operationId": "deleteContact",
+        "operationId": "deletePeep",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "contactId",
+            "name": "peepId",
             "in": "path",
-            "description": "ID of Contact to return",
+            "description": "ID of Peep to return",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -206,7 +206,7 @@
     }
   },
   "definitions": {
-    "Contact": {
+    "Peep": {
       "type": "object",
       "required": [
         "name",

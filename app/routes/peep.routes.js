@@ -1,46 +1,53 @@
-// ****************************************************************************
-// Copyright 2023 David L. Whitehurst
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-//
-// You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
-//
-// ****************************************************************************
+const { authJwt } = require("../utility");
+const controller = require("../controllers/peep.controller");
 
-module.exports = app => {
-    const { authJwt } = require("../utility");
-    const peeps = require("../controllers/peep.controller.js");
+module.exports = function(app) {
+    app.use(function(req, res, next) {
+        res.header(
+            "Access-Control-Allow-Headers",
+            "Origin, Content-Type, Accept"
+        );
+        next();
+    });
 
-    // Create a new Peep
-    app.post("/api/v1/peeps", peeps.create);
-
-    // Retrieve all Peeps
     app.get(
-        "/api/v1/peeps",
-        [authJwt.verifyToken, authJwt.isOwner],
-        peeps.findAll
+        "/personal/v1/peeps",
+//        [authJwt.verifyToken],
+        controller.getAllPeeps //getAllPeeps
     );
 
-    //app.get("/api/v1/peeps", peeps.findAll);
+    app.get(
+        "/personal/v1/peeps/:id",
+//        [authJwt.verifyToken, authJwt.isOwner],
+        controller.getPeep
+    );
 
-    // Retrieve a single Peep with peepId
-    app.get("/api/v1/peeps/:peepId", peeps.findOne);
+    // Create a new Peep
+    app.post(
+        "/personal/v1/peeps",
+//        [authJwt.verifyToken, authJwt.isOwner],
+        controller.createPeep
+    );
 
-    // Update a Peep with peepId
-    app.put("/api/v1/peeps/:peepId", peeps.update);
+    // Update a Peep with PeepId
+    app.put(
+        "/personal/v1/peeps/:id",
+//        [authJwt.verifyToken, authJwt.isOwner],
+        controller.updatePeep
+    );
 
-    // Delete a Peep with peepId
-    app.delete("/api/v1/peeps/:peepId", peeps.delete);
+    // Delete a Peep with PeepId
+    app.delete(
+        "/personal/v1/peeps/:id",
+//        [authJwt.verifyToken, authJwt.isOwner],
+        controller.deletePeep
+    );
 
-    // Delete all peeps
-    app.delete("/api/v1/peeps", peeps.deleteAll);
+    // Delete all Peeps
+    app.delete(
+        "/personal/v1/peeps",
+//        [authJwt.verifyToken, authJwt.isOwner],
+        controller.deleteAllPeeps
+    );
 };
+

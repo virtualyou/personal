@@ -1,156 +1,91 @@
-// ****************************************************************************
-// Copyright 2023 David L. Whitehurst
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-//
-// You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
-//
-// ****************************************************************************
+const db = require("../models");
+const {locals} = require("express/lib/application");
+const Peep = db.peep;
 
-// FIXME review controller
-
-const Peep = require("../models/peep.model.js");
-
-// Create and Save a new Peep
-exports.create = (req, res) => {
-    // Validate request
-    if (!req.body) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
+exports.getAllPeeps = async (req, res) => {
+    try {
+        const peeps = await Peep.findAll();
+        res.send(peeps);
+    } catch (error) {
+        res.status(500).send({ message: error.message });
     }
-    //console.log(req.body);
-
-    // Create a Peep
-    const peep = new Peep({
-        name: req.body.name,
-        email: req.body.email,
-        phone1: req.body.phone1,
-        phone2: req.body.phone2,
-        address: req.body.address,
-        note: req.body.note
-    });
-
-    // Save Peep in the database
-    Peep.create(peep, (err, data) => {
-        if (err)
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Peep."
-            });
-        else {
-            res.status(201); // created (success)
-            res.send(''); // empty body
-        }
-    });
 };
 
-// Retrieve all Peeps from the database.
-exports.findAll = (req, res) => {
-    Peep.getAll((err, data) => {
-        if (err)
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving peeps."
-            });
-        else {
-		res.header("Access-Control-Allow-Origin", "*");
-		res.send(data);
-	}
-		
-    });
-};
-
-// Find a single Peep with a peepId
-exports.findOne = (req, res) => {
-    Peep.findById(req.params.peepId, (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(404).send({
-                    message: `Not found Peep with id ${req.params.peepId}.`
-                });
-            } else {
-                res.status(500).send({
-                    message: "Error retrieving Peep with id " + req.params.peepId
-                });
-            }
-        } else res.send(data);
-    });
-};
-
-// Update a Peep identified by the peepId in the request
-exports.update = (req, res) => {
-    // Validate Request
-    if (!req.body) {
-        res.status(400).send({
-            message: "Content can not be empty!"
+exports.getAllPeepsForCurrentUser = async (req, res) => {
+    try {
+        const peeps = await Peep.findAll({
+            where: {
+                userKey: req.userId,
+            },
         });
+        res.send(peeps);
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+};
+
+exports.getAllPeepsForOwner = async (req, res) => {
+    // check if owner already
+    let key = -1;
+    if (req.ownerId === 0) {
+        console.log("ownerId " + req.ownerId);
+        key = req.userId;
+    } else {
+        key = req.ownerId;
+        console.log("ownerId " + req.ownerId);
     }
 
-    console.log(req.body);
-
-    Peep.updateById(
-        req.params.peepId,
-        new Peep(req.body),
-        (err, data) => {
-            if (err) {
-                if (err.kind === "not_found") {
-                    res.status(404).send({
-                        message: `Not found Peep with id ${req.params.peepId}.`
-                    });
-                } else {
-                    res.status(500).send({
-                        message: "Error updating Peep with id " + req.params.peepId
-                    });
-                }
-            } else {
-                res.status(204); // no content (success)
-                res.send(''); // empty body
-            }
-        }
-    );
+    // get peeps
+    try {
+        const peeps = await Peep.findAll({
+            where: {
+                userKey: key,
+            },
+        });
+        res.send(peeps);
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
 };
 
-// Delete a Peep with the specified peepId in the request
-exports.delete = (req, res) => {
-    Peep.remove(req.params.peepId, (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(404).send({
-                    message: `Not found Peep with id ${req.params.peepId}.`
-                });
-            } else {
-                res.status(500).send({
-                    message: "Could not delete Peep with id " + req.params.peepId
-                });
-            }
-        } else {
-            res.status(204); // no content (success)
-            res.send(''); // empty body
+exports.getPeep = async (req, res) => {
+    try {
+        const peep = await Peep.findByPk(req.params.id);
+        if (!peep) {
+            return res.status(404).json({ error: 'Peep not found' });
         }
-    });
-};
+        return res.json(peep);
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+}
 
-// Delete all Peeps from the database.
-exports.deleteAll = (req, res) => {
-    Peep.removeAll((err, data) => {
-        if (err)
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all peeps."
-            });
-        else {
-            res.status(204); // no content (success)
-            res.send(''); // empty body
+exports.createPeep = async (req, res) => {
+}
+
+exports.updatePeep = async (req, res) => {
+}
+
+exports.deletePeep = async (req, res) => {
+    try {
+        const peep = await Peep.findByPk(req.params.id);
+        if (!peep) {
+            return res.status(404).json({ error: 'Peep not found to be deleted' });
         }
-    });
-};
+        await peep.destroy()
+        return res.status(204);
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+}
+
+exports.deleteAllPeeps = async (req, res) => {
+    try {
+        Peep.destroy({
+            truncate: true // maybe?
+        });
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+}
+

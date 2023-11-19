@@ -1,6 +1,6 @@
 {
   "name": "personal",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Node.js Express Personal API on Port 3006",
   "main": "server.js",
   "scripts": {

@@ -173,7 +173,7 @@ isMonitor = async (req, res, next) => {
 // Fetch all User Roles (Private)
 async function fetchData(id, cookie) {
   try {
-    const response = await fetch(USERAUTH_SERVER_PORT_URL + '/api/v1/users/' + id + '/roles', {
+    const response = await fetch(USERAUTH_SERVER_PORT_URL + '/userauth/v1/users/' + id + '/roles', {
       headers: {
         cookie
       }

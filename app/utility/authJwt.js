@@ -35,7 +35,8 @@ verifyToken = (req, res, next) => {
 isAdmin = async (req, res, next) => {
   try {
     const userid = req.userId;
-    const roles = await fetchData(req, userid);
+    const cookieHeader = req.headers.cookie;
+    const roles = await fetchData(userid, cookieHeader);
 
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].name === "admin") {
@@ -57,7 +58,8 @@ isAdmin = async (req, res, next) => {
 isOwner = async (req, res, next) => {
   try {
     const userid = req.userId;
-    const roles = await fetchData(req, userid);
+    const cookieHeader = req.headers.cookie;
+    const roles = await fetchData(userid, cookieHeader);
 
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].name === "owner") {
@@ -79,7 +81,8 @@ isOwner = async (req, res, next) => {
 isOwnerOrAgent = async (req, res, next) => {
   try {
     const userid = req.userId;
-    const roles = await fetchData(req, userid);
+    const cookieHeader = req.headers.cookie;
+    const roles = await fetchData(userid, cookieHeader);
 
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].name === "owner" || roles[i].name === "agent") {
@@ -101,7 +104,8 @@ isOwnerOrAgent = async (req, res, next) => {
 isOwnerOrAgentOrMonitor = async (req, res, next) => {
   try {
     const userid = req.userId;
-    const roles = await fetchData(req, userid);
+    const cookieHeader = req.headers.cookie;
+    const roles = await fetchData(userid, cookieHeader);
 
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].name === "owner" || roles[i].name === "agent" || roles[i].name === "monitor") {
@@ -123,7 +127,8 @@ isOwnerOrAgentOrMonitor = async (req, res, next) => {
 isAgent = async (req, res, next) => {
   try {
     const userid = req.userId;
-    const roles = await fetchData(req, userid);
+    const cookieHeader = req.headers.cookie;
+    const roles = await fetchData(userid, cookieHeader);
 
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].name === "agent") {
@@ -145,7 +150,8 @@ isAgent = async (req, res, next) => {
 isMonitor = async (req, res, next) => {
   try {
     const userid = req.userId;
-    const roles = await fetchData(req, userid);
+    const cookieHeader = req.headers.cookie;
+    const roles = await fetchData(userid, cookieHeader);
 
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].name === "monitor") {
@@ -165,12 +171,12 @@ isMonitor = async (req, res, next) => {
 };
 
 // Fetch all User Roles (Private)
-async function fetchData(req, id) {
+async function fetchData(id, cookie) {
   try {
-    const headers = req.headers;
-
     const response = await fetch(USERAUTH_SERVER_PORT_URL + '/api/v1/users/' + id + '/roles', {
-      headers: headers
+      headers: {
+        cookie
+      }
     });
 
     const data = await response.json();
@@ -179,7 +185,7 @@ async function fetchData(req, id) {
   } catch (error) {
     console.error(error);
   }
-};
+}
 
 const authJwt = {
   verifyToken,

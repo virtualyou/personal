@@ -26,7 +26,7 @@ app.use(
 const { createProxyMiddleware } = require('http-proxy-middleware');
 module.exports = function(app) {
   app.use(
-      '/api',
+      '/userauth',
       createProxyMiddleware({
         target: USERAUTH_SERVER_PORT_URL,
         changeOrigin: true,
@@ -38,7 +38,7 @@ module.exports = function(app) {
 const db = require("./app/models");
 const Peep = db.peep;
 /*
-    db.sequelize.sync({force: true}).then(() => {
+db.sequelize.sync({force: true}).then(() => {
         console.log('Drop and Recreate Db');
         initial();
     });

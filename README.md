@@ -5,12 +5,23 @@ MariaDB for its data and persistence. The endpoints are protected using JWT and
 ROLE authorization for use with the VirtualYou Web application.
 
 ### Endpoints
-- /api/v1/peeps GET
-- /api/v1/peeps POST
-- /api/v1/peeps DELETE
-- /api/v1/peeps/{id} GET
-- /api/v1/peeps/{id} PUT
-- /api/v1/peeps/{id} DELETE
+#### Admin Only (ROLE_ADMIN + JWT Auth)
+- /personal/v1/peeps GET
+- /personal/v1/peeps POST
+- /personal/v1/peeps DELETE
+- /personal/v1/peeps/{id} GET
+- /personal/v1/peeps/{id} PUT
+- /personal/v1/peeps/{id} DELETE
+
+#### User (ROLE_OWNER/AGENT/MONITOR? + JWT Auth)
+- /personal/v1/owner/peeps GET
+- /personal/v1/owner/peeps POST
+- /personal/v1/owner/peeps DELETE
+- /personal/v1/owner/peeps/{id} GET
+- /personal/v1/owner/peeps/{id} PUT
+- /personal/v1/owner/peeps/{id} DELETE
+
+#### No Auth
 - /api-docs Swagger API Specification
 
 **NOTE**: There will probably be more resources and endpoints however, this is the
@@ -62,25 +73,6 @@ You should see output like so:
 ```shell
 > node server.js
 
-Server is running on port 300X.
+Server is running on port 3006.
 ```
 
-You can use curl to test the application or just open a browser for the GET-
-assets call e.g.. Here's a curl command to see if your application is running.
-
-```shell
-curl -i -X GET http://localhost:300X/api/v1/peeps
-```
---- 
-```shell
-HTTP/1.1 200 OK
-X-Powered-By: Express
-Content-Type: application/json; charset=utf-8
-Content-Length: 490
-ETag: W/"1ea-WWVCrHbuv7rNuvubR3/rd1Myb24"
-Date: Wed, 25 Oct 2023 23:27:55 GMT
-Connection: keep-alive
-Keep-Alive: timeout=5
-
-[{"id":1,"name":"John Williams","email":"jwilliams55@gmail.com","phone1":"405-234-8478","phone2":"","address":"12 Shady Lane Dr, Omaha, NE, 24999","note":"Father"},{"id":2,"name":"Sally Williams","email":"swilliams55@gmail.com","phone1":"405-234-8367","phone2":"","address":"12 Shady Lane Dr, Omaha, NE, 24999","note":"Mother"},{"id":3,"name":"Tom Williams","email":"tom.williams@outlook.com","phone1":"367-299-3333","phone2":"","address":"45 Ice Truck Rd, Anchorage, AK","note":"Brother"}]
-```

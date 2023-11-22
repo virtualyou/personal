@@ -60,7 +60,7 @@ require("./app/routes/peep.routes")(app);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // set port, listen for requests
-const PORT = process.env.PORT || 3006;
+const PORT = process.env.PORT || 3002;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);

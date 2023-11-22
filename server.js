@@ -45,19 +45,12 @@ db.sequelize.sync({force: true}).then(() => {
 */
 db.sequelize.sync();
 
-// swagger api documentation
-const swaggerUi = require("swagger-ui-express"),
-    swaggerDocument = require("./swagger.json");
-
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the VirtualYou Personal Secure API Express application." });
+  res.json({ message: "Welcome to the VirtualYou Personal API." });
 });
 
 // routes
 require("./app/routes/peep.routes")(app);
-
-// swagger path to api documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3002;
@@ -66,17 +59,6 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-/*
-{
-  "name": "Wendy Smith",
-    "email": "sissylou@yahoo.com",
-    "phone1": "919-354-6938",
-    "phone2": "",
-    "address": "123 Dreamy Blvd, Los Angeles, CA, 90210",
-    "note": "Sister",
-    "userKey": 10
-}
-*/
 
 function initial() {
   Peep.create({
@@ -128,5 +110,4 @@ function initial() {
     address: "",
     note: "Jeweler"
   });
-
 }

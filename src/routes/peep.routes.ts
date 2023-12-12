@@ -18,11 +18,14 @@
  *
  */
 
-const { authJwt } = require("../utility");
-const controller = require("../controllers/peep.controller");
+import {NextFunction, Request, Response} from "express";
+import peepController from "../controllers/peep.controller";
+import authJwt from '../utility/authJwt';
+import express from 'express';
 
-module.exports = function(app) {
-    app.use(function(req, res, next) {
+const peepRouter = express();
+
+    peepRouter.use(function(_req: Request, res: Response, next: NextFunction) {
         res.header(
             "Access-Control-Allow-Headers",
             "Origin, Content-Type, Accept"
@@ -32,91 +35,90 @@ module.exports = function(app) {
 
 /*
  * ************************************************************************
- * ADMIN ONLY
+ * WARNING: Admin only
  * ************************************************************************
  */
     // GET - all peeps
-    app.get(
+    peepRouter.get(
         "/personal/v1/peeps",
         [authJwt.verifyToken, authJwt.isAdmin],
-        controller.getAllPeeps
+        peepController.getAllPeeps
     );
 
     // GET - a peep by id
-    app.get(
+    peepRouter.get(
         "/personal/v1/peeps/:id",
         [authJwt.verifyToken, authJwt.isAdmin],
-        controller.getPeep
+        peepController.getPeep
     );
 
     // PUT - update a peep by id
-    app.put(
+    peepRouter.put(
         "/personal/v1/peeps/:id",
         [authJwt.verifyToken, authJwt.isAdmin],
-        controller.updatePeep
+        peepController.updatePeep
     );
 
     // DELETE - a peep by id
-    app.delete(
+    peepRouter.delete(
         "/personal/v1/peeps/:id",
         [authJwt.verifyToken, authJwt.isAdmin],
-        controller.deletePeep
+        peepController.deletePeep
     );
 
     // DELETE - all peeps
-    app.delete(
+    peepRouter.delete(
         "/personal/v1/peeps",
         [authJwt.verifyToken, authJwt.isAdmin],
-        controller.deleteAllPeeps
+        peepController.deleteAllPeeps
     );
 
     /*
      * ************************************************************************
-     * OWNER, AGENT, (MONITOR?) USER
+     * Owner related
      * ************************************************************************
      */
 
     // GET - all peeps for owner
-    app.get(
+    peepRouter.get(
         "/personal/v1/owner/peeps",
         [authJwt.verifyToken, authJwt.isOwnerOrAgentOrMonitor],
-        controller.getAllPeepsForOwner
+        peepController.getAllPeepsForOwner
     );
 
     // GET - peep by id for owner only
-    app.get(
+    peepRouter.get(
         "/personal/v1/owner/peeps/:id",
         [authJwt.verifyToken, authJwt.isOwnerOrAgentOrMonitor],
-        controller.getPeepForOwner
+        peepController.getPeepForOwner
     );
 
     // POST - create a new Peep for owner (owner or agent cognizant of userKey)
-    app.post(
+    peepRouter.post(
         "/personal/v1/owner/peeps",
         [authJwt.verifyToken, authJwt.isOwnerOrAgent],
-        controller.createPeepForOwner
+        peepController.createPeepForOwner
     );
 
     // PUT - update a peep for owner only
-    app.put(
+    peepRouter.put(
         "/personal/v1/owner/peeps/:id",
         [authJwt.verifyToken, authJwt.isOwnerOrAgent],
-        controller.updatePeepForOwner
+        peepController.updatePeepForOwner
     );
 
     // DELETE - delete a peep by id for owner only
-    app.delete(
+    peepRouter.delete(
         "/personal/v1/owner/peeps/:id",
         [authJwt.verifyToken, authJwt.isOwnerOrAgent],
-        controller.deletePeepForOwner
+        peepController.deletePeepForOwner
     );
 
     // DELETE - all peeps for owner only
-    app.delete(
+    peepRouter.delete(
         "/personal/v1/owner/peeps",
         [authJwt.verifyToken, authJwt.isOwnerOrAgent],
-        controller.deleteAllPeepsForOwner
+        peepController.deleteAllPeepsForOwner
     );
 
-};
-
+export default peepRouter;

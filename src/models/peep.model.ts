@@ -1,6 +1,5 @@
 
 /*
- *
  * VirtualYou Project
  * Copyright 2023 David L Whitehurst
  *
@@ -16,9 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
+ * task.model.ts
  */
 
-module.exports = (sequelize, Sequelize) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const peep = (sequelize: any, Sequelize: any) => {
     return sequelize.define("peeps", {
         name: {
             type: Sequelize.STRING
@@ -43,12 +44,4 @@ module.exports = (sequelize, Sequelize) => {
         }
     });
 };
-/*
-    "name": "Bob Taylor",
-    "email": "btaylor79@gmail.com",
-    "phone1": "919-567-5499",
-    "phone2": "456-122-8000",
-    "address": "7823 Waters Lane, Miami, Florida, 23499",
-    "note": "Close friend",
-    "userKey": 10
- */
+export default peep;

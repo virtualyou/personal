@@ -37,7 +37,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-
 app.use(
     cookieSession({
         name: "virtualyou-session",
@@ -78,7 +77,7 @@ app.use(peepRouter);
 function initial() {
     Peep.create({
         name: "David Knoxville",
-        userKey: 10,
+        userKey: 1,
         phone1: "919-888-3000",
         phone2: "",
         email: "me@dlwhitehurst.com",
@@ -88,7 +87,7 @@ function initial() {
 
     Peep.create({
         name: "Patty Brown",
-        userKey: 10,
+        userKey: 1,
         phone1: "722-310-1288",
         phone2: "",
         email: "pbrown@schwartz.com",
@@ -98,7 +97,7 @@ function initial() {
 
     Peep.create({
         name: "Nancy Reynolds",
-        userKey: 13,
+        userKey: 1,
         phone1: "800-825-9274",
         phone2: "",
         email: "nrey@acme.com",
@@ -108,7 +107,7 @@ function initial() {
 
     Peep.create({
         name: "Peggy Smith",
-        userKey: 13,
+        userKey: 1,
         phone1: "892-123-7702",
         phone2: "",
         email: "psmith@yahoo.com",
@@ -118,7 +117,7 @@ function initial() {
 
     Peep.create({
         name: "Robert Sandberg",
-        userKey: 13,
+        userKey: 1,
         phone1: "877-655-2309",
         phone2: "",
         email: "rsandberg@gmail.com",

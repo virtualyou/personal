@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -16,10 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
+ * endpoints.test.ts
  */
 
-const authJwt = require("./authJwt");
+import request from "supertest";
+import app from "../src/app";
 
-module.exports = {
-  authJwt
-};
+describe("Test get all owner peeps", () => {
+  const agent = request.agent(app);
+  it("GET /personal/v1/owner/peeps", async () => {
+    const response2 = await agent.get("/personal/v1/owner/peeps"); //.set(cookie);
+    expect(response2.statusCode).toBe(403);
+    expect(response2.type).toBe("application/json");
+    expect(response2.body).toEqual({"message": "No token provided!"});
+  });
+});
+

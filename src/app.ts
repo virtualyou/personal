@@ -41,6 +41,7 @@ app.use(
     cookieSession({
         name: "virtualyou-session",
         keys: ["COOKIE_SECRET"],
+        //domain: '.virtualyou.info',
         httpOnly: true,
         sameSite: 'strict'
     })
@@ -55,7 +56,7 @@ app.use(function (_req, res, next) {
 });
 
 app.get("/", (_req, res) => {
-    res.send("Welcome to the VirtuaYou Personal API.");
+    res.send("Welcome to the VirtualYou Personal API.");
 });
 
 // database
